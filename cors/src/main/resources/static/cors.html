@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cors跨域解决方案</title>
+    <script src="jquery.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<input type="button" value="get_button" onclick="btnClick()">
+<input type="button" value="post_button" onclick="btnClick1()">
+<input type="button" value="put_button" onclick="btnClick2()">
+
+
+<script>
+    function btnClick() {
+        $.get("http://localhost:8081/hello",function (msg) {
+            $("#app").html(msg);
+            //alert(msg)
+        })
+    }
+
+    function btnClick1() {
+        $.ajax({
+            type:'post',
+            url:'http://localhost:8081/dopost',
+            contentType:"application/json",
+            beforeSend:function(XMLHttpRequest){
+                XMLHttpRequest.setRequestHeader("token","123456");
+            },
+            success:function (msg,XMLHttpRequest) {
+                $("#app").html(msg);
+            },
+            //携带cookie
+            xhrFields: {
+                withCredentials: true // 这里设置了withCredentials
+            }
+        })
+    }
+
+    function btnClick2() {
+        $.ajax({
+            type:'put',
+            url:'http://localhost:8081/doput',
+            success:function (msg) {
+                $("#app").html(msg);
+            }
+        })
+    }
+</script>
+
+</body>
+</html>
